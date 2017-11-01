@@ -15,8 +15,8 @@ static void *hello_world (void *p) {
 	printf ("[Hello World from userland thread %d!]", *(int *)p);
 	fflush (stdout);
 
-	for (int i = 0; 1000 > i; ++i) {
-		for (int j = 0; 200000 > j; ++j);
+	for (int i = 0; 200 > i; ++i) {
+		for (int j = 0; 100000 > j; ++j);
 		putc ('.', stdout);
 		fflush (stdout);
 	}

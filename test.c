@@ -11,6 +11,7 @@
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+__attribute__((optimize("O0")))
 static void *hello_world (void *p) {
 	printf ("[Hello World from userland thread %d!]", *(int *)p);
 	fflush (stdout);

@@ -135,6 +135,7 @@ static void usched_unblock_alarm () {
 
 static void usched_alarm_action_handler (int signal) {
 	fprintf (stderr, "[Caught %s -> task switch]", strsignal(signal));
+	fflush (stderr);
 
 	usched_yeild ();
 

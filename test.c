@@ -2,6 +2,8 @@
 
 #include <stddef.h>
 
+#include <errno.h>
+#include <string.h>
 #include <unistd.h>
 #include <stdio.h>
 
@@ -11,6 +13,7 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 static void *hello_world (void *p) {
 	printf ("[Hello World from userland thread %d!]", *(int *)p);
+	fflush (stdout);
 
 	for (int i = 0; 1000 > i; ++i) {
 		for (int j = 0; 200000 > j; ++j);
@@ -18,7 +21,12 @@ static void *hello_world (void *p) {
 		fflush (stdout);
 	}
 
+	char c = 'x';
+	size_t s = fread (&c, 1, 1, stdin);
+	printf ("[Read char size %zu, errno %s]", s, strerror (errno));
+
 	printf ("[Goodbye World from userland thread %d!]", *(int *)p);
+	fflush (stdout);
 
 	return NULL;
 }

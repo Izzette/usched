@@ -1,0 +1,7 @@
+# .gitignore
+
+*.o
+.*.sw*
+test
+
+# vim: set syn=config:

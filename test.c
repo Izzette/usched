@@ -28,7 +28,7 @@ static void *hello_world (void *p) {
 	printf ("[Goodbye World from userland thread %d!]", *(int *)p);
 	fflush (stdout);
 
-	return NULL;
+	return p;
 }
 #pragma GCC diagnostic pop
 
@@ -42,8 +42,15 @@ int main () {
 
 	for (;;) {
 		for (int i = 0; 3 > i; ++i) {
-			if (!hello_threads[i]->result)
-				break;
+			if (hello_threads[i]) {
+				if (!hello_threads[i]->result)
+					break;
+
+				printf ("[Hello thread %ld exited, result: %d]",
+						hello_threads[i]->tid, **(int **)hello_threads[i]->result);
+				usched_thread_release (hello_threads[i]);
+				hello_threads[i] = NULL;
+			}
 
 			if (i == 2)
 				return 0;

@@ -20,28 +20,19 @@ static size_t cur_thread_index = 0;
 static usched_thread_t *cur_thread = NULL;
 static usched_thread_t *threads[USCHED_MAX_THREADS];
 
-static struct sigaction usched_alarm_action;
-static struct sigevent usched_alarm_event;
-static struct itimerspec usched_tspec;
-
+static void usched_unblock_alarm ();
 static void usched_alarm_action_handler (int);
 static void progress_thread_index ();
 static void *push_n (void *, void *, size_t);
 static void usched_thread_init (usched_thread_t *);
+static void usched_thread_fin (usched_thread_t *, void *);
 __attribute__((noreturn)) static void usched_bootstrap ();
 
-#define MK_STACK_PUSH(suffix, bits, id) \
-static void *push_##suffix (void *stack, uint##bits##_t id) { \
-	return push_n (stack, &id, sizeof(id)); \
-}
-
-MK_STACK_PUSH(byte,  8,  b)
-MK_STACK_PUSH(word,  16, w)
-MK_STACK_PUSH(dword, 32, dw)
-MK_STACK_PUSH(qword, 64, qw)
-
-
 int usched_init () {
+	static struct sigaction usched_alarm_action;
+	static struct sigevent usched_alarm_event;
+	static struct itimerspec usched_tspec;
+
 	timer_t timer_id;
 	int ret = 0;
 
